@@ -1,41 +1,62 @@
-NAME = fractol
-INCLUDE = includes
-LIBFT_DIR = libs/libft
-SRC_DIR = src
-OBJ_DIR = obj
-CC = gcc
-CFLAGS = -Wall -Werror -Wextra -I $(INCLUDE)
+LIBFT_PATH		=	libs/libft
+LIBFT			=	$(LIBFT_PATH)/libft.a
 
-LIBFT = $(LIBFT_DIR)/libft.a
+MINILIBX_PATH	=	libs/minilibx/
+MINILIBX		=	$(MINILIBX_PATH)/libmlx.a
 
-SRC_FILES = main.c init_stack.c sort_stack.c sort_stack_utils.c utils.c push.c swap.c rotate.c rev_rotate.c smart_sort.c smart_sort_utils.c error.c check_args.c
+SRC_FILES		=
+SRC_BONUS		=
 
-SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
-OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
+SRC_DIR			=	src
+BONUS_DIR		=	src_bonus
 
-all: $(NAME)
+INCLUDES		=	includes
+HEADER			=	$(INCLUDES)/so_long.h
+HEADER_BONUS	=	$(INCLUDES)/so_long_bonus.h
 
-$(NAME): $(LIBFT) $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -L$(LIBFT_DIR) -lft -o $(NAME)
+SRC				=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
+BONUS_FILES		=	$(addprefix $(BONUS_DIR)/, $(SRC_BONUS))
+
+OBJ			= 	$(SRC:.c=.o)
+OBJ_BONUS	= 	$(BONUS_FILES:.c=.o)
+
+NAME			=	so_long
+NAME_BONUS		=	so_long_bonus
+
+CC				=	gcc
+RM				=	rm -f
+
+CFLAGS			=	-Wall -Wextra -Werror
+MLXFLAGS		=	-L. -lXext -L. -lX11
+
+.c.o:
+				$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
+
+all:			$(NAME)
+
+bonus:			$(NAME_BONUS)
+
+$(NAME):		$(LIBFT) $(MINILIBX) $(OBJ) $(HEADER)
+				$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(MINILIBX) $(MLXFLAGS) -o $(NAME)
+
+$(NAME_BONUS):		$(LIBFT) $(MINILIBX) $(OBJ_BONUS) $(HEADER_BONUS)
+					$(CC) $(CFLAGS) $(OBJ_BONUS) $(LIBFT) $(MINILIBX) $(MLXFLAGS) -o $(NAME_BONUS)
 
 $(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+				$(MAKE) -C $(LIBFT_PATH)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+$(MINILIBX):
+				$(MAKE) -C $(MINILIBX_PATH)
 
 clean:
-	$(MAKE) -C $(LIBFT_DIR) clean
-	rm -rf $(OBJ_DIR)
+				$(MAKE) -C $(LIBFT_PATH) clean
+				$(MAKE) -C $(MINILIBX_PATH) clean
+				$(RM) $(OBJ) $(OBJ_BONUS)
 
-fclean:
-	$(MAKE) -C $(LIBFT_DIR) fclean
-	rm -rf $(OBJ_DIR)
-	rm -f $(NAME)
+fclean:			clean
+				$(MAKE) -C $(LIBFT_PATH) fclean
+				$(RM) $(NAME) $(NAME_BONUS)
 
-re: fclean all
+re:				fclean all
 
-.PHONY: all clean fclean re
+.PHONY:			all clean fclean re libft minilibx bonus
