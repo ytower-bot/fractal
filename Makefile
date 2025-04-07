@@ -4,15 +4,15 @@ LIBFT			=	$(LIBFT_PATH)/libft.a
 MINILIBX_PATH	=	libs/minilibx/
 MINILIBX		=	$(MINILIBX_PATH)/libmlx.a
 
-SRC_FILES		=
+SRC_FILES		=	main.c
 SRC_BONUS		=
 
 SRC_DIR			=	src
 BONUS_DIR		=	src_bonus
 
 INCLUDES		=	includes
-HEADER			=	$(INCLUDES)/so_long.h
-HEADER_BONUS	=	$(INCLUDES)/so_long_bonus.h
+HEADER			=	$(INCLUDES)/fractol.h
+HEADER_BONUS	=	$(INCLUDES)/fractol_bonus.h
 
 SRC				=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 BONUS_FILES		=	$(addprefix $(BONUS_DIR)/, $(SRC_BONUS))
@@ -20,8 +20,8 @@ BONUS_FILES		=	$(addprefix $(BONUS_DIR)/, $(SRC_BONUS))
 OBJ			= 	$(SRC:.c=.o)
 OBJ_BONUS	= 	$(BONUS_FILES:.c=.o)
 
-NAME			=	so_long
-NAME_BONUS		=	so_long_bonus
+NAME			=	fractol
+NAME_BONUS		=	fractol_bonus
 
 CC				=	gcc
 RM				=	rm -f
