@@ -53,9 +53,10 @@ clean:
 				$(MAKE) -C $(MINILIBX_PATH) clean
 				$(RM) $(OBJ) $(OBJ_BONUS)
 
-fclean:			clean
+fclean:			
 				$(MAKE) -C $(LIBFT_PATH) fclean
-				$(RM) $(NAME) $(NAME_BONUS)
+				$(MAKE) -C $(MINILIBX_PATH) clean
+				$(RM) $(OBJ) $(OBJ_BONUS) $(NAME) $(NAME_BONUS)
 
 re:				fclean all
 
