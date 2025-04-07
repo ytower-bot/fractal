@@ -6,6 +6,7 @@
 # include "../libs/libft/includes/libft.h"
 # include "../libs/minilibx/mlx.h"
 
-// ---
+// error
+void	exit_error(void);
 
 #endif
