@@ -4,7 +4,7 @@ LIBFT			=	$(LIBFT_PATH)/libft.a
 MINILIBX_PATH	=	libs/minilibx/
 MINILIBX		=	$(MINILIBX_PATH)/libmlx.a
 
-SRC_FILES		=	main.c
+SRC_FILES		=	main.c error.c
 SRC_BONUS		=
 
 SRC_DIR			=	src
