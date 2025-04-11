@@ -6,43 +6,33 @@
 /*   By: yfaustin <yfaustin@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:22:30 by yfaustin          #+#    #+#             */
-/*   Updated: 2025/04/07 16:13:22 by yfaustin         ###   ########.fr       */
+/*   Updated: 2025/04/11 14:54:17 by yfaustin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/fractol.h"
 
-typedef struct	s_data {
-	void	*img;
-	void	*addr;
-	int		bpp;
-	int		line_len;
-	int		endian;
-}				t_data;
-
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+static void	check_args(int ac, char **av)
 {
-	char	*dst;
-
-	dst = data->addr + (y * data->line_len + x * (data->bpp / 8));
-	*(unsigned int *)dst = color;
+	if (ac != 2 && ac != 4)
+		exit_error("./fractol <type> [real_n] [imaginary_n]\n");
+	if (ft_strncmp(av[1], "mandelbrot", 10) && ft_strncmp(av[1], "julia", 5))
+		exit_error("invalid fractal type: use'mandelbrot' or 'julia'.\n");
+	if (!ft_strncmp(av[1], "julia", 5) && ac != 4)
+		exit_error("missing julia parameters: [julia_re] [julia_im]\n");
 }
 
-int	main(int argc, char **argv)
+int	main(int ac, char **av)
 {
-	void	*mlx;
-	void	*mlx_win;
-	t_data	img;
+	t_fractal	f;
 
-	if (argc != 4)
-		exit_error();
-
-	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, 500, 500, argv[3]);
-	img.img = mlx_new_image(mlx, 80, 80);
-	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
-	my_mlx_pixel_put(&img, 0, 0, 0x00FF0000);
-	mlx_put_image_to_window(mlx, mlx_win, img.img, 250, 250);
-	mlx_loop(mlx);
+	check_args(ac, av);
+	init_fractal(&f, av);
+	init_mlx(&f);
+	render_fractal(&f);
+	mlx_hook(f.win, 2, 1L << 0, key_hook, &f);
+	mlx_hook(f.win, 4, 1L << 2, mouse_hook, &f);
+	mlx_hook(f.win, 17, 0, close_window, &f);
+	mlx_loop(f.mlx);
+	return (0);
 }
-
