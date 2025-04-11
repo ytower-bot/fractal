@@ -4,7 +4,7 @@ LIBFT			=	$(LIBFT_PATH)/libft.a
 MINILIBX_PATH	=	libs/minilibx/
 MINILIBX		=	$(MINILIBX_PATH)/libmlx.a
 
-SRC_FILES		=	main.c error.c
+SRC_FILES		=	main.c init.c render.c fractals.c events.c utils.c
 SRC_BONUS		=
 
 SRC_DIR			=	src
@@ -23,30 +23,26 @@ OBJ_BONUS	= 	$(BONUS_FILES:.c=.o)
 NAME			=	fractol
 NAME_BONUS		=	fractol_bonus
 
-CC				=	gcc
+CC				=	cc
 RM				=	rm -f
 
 CFLAGS			=	-Wall -Wextra -Werror
-MLXFLAGS		=	-L. -lXext -L. -lX11
+MLX_FLAGS		=	-L./libs/minilibx -lmlx -lXext -lX11 -lm
 
 .c.o:
-				$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
+				$(CC) $(CFLAGS) -I./includes -I./libs/libft/includes -I./libs/minilibx -c $< -o $@
 
 all:			$(NAME)
 
 bonus:			$(NAME_BONUS)
 
-$(NAME):		$(LIBFT) $(MINILIBX) $(OBJ) $(HEADER)
-				$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(MINILIBX) $(MLXFLAGS) -o $(NAME)
-
-$(NAME_BONUS):		$(LIBFT) $(MINILIBX) $(OBJ_BONUS) $(HEADER_BONUS)
-					$(CC) $(CFLAGS) $(OBJ_BONUS) $(LIBFT) $(MINILIBX) $(MLXFLAGS) -o $(NAME_BONUS)
-
-$(LIBFT):
+$(NAME):		$(OBJ) $(HEADER)
 				$(MAKE) -C $(LIBFT_PATH)
-
-$(MINILIBX):
 				$(MAKE) -C $(MINILIBX_PATH)
+				$(CC) $(CFLAGS) $(OBJ) -L./libs/libft -lft $(MLX_FLAGS) -o $(NAME)
+
+$(NAME_BONUS):		$(OBJ_BONUS) $(HEADER_BONUS)
+					$(CC) $(CFLAGS) $(OBJ_BONUS) -L./libs/libft -lft $(MLX_FLAGS) -o $(NAME_BONUS)
 
 clean:
 				$(MAKE) -C $(LIBFT_PATH) clean
